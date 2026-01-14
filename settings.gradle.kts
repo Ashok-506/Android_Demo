@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Android(Demo OSV"
+rootProject.name = "Android Demo OSV"
 include(":app")
