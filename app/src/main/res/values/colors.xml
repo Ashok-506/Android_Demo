@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="colorPrimary">#7384ae</color>
+    <color name="colorPrimaryDark">#6377ac</color>
+    <color name="colorPrimaryVariant">#6377ac</color>
+    <color name="card_normal">#FFFFFF</color>
+    <color name="card_cooling">#FFF3E0</color> <!-- light orange -->
+    <color name="card_active">#E8F5E9</color>  <!-- light green -->
+    <color name="card_disabled">#EEEEEE</color>
 </resources>
