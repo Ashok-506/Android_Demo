@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.androiddemoosv.R
 import com.test.androiddemoosv.databinding.ActivityMainBinding
 import com.test.androiddemoosv.viewmodel.MainViewModel
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         WindowInsetsControllerCompat(window, window.decorView)
             .isAppearanceLightStatusBars = false   // light icons
 
-        window.statusBarColor = Color.TRANSPARENT
+        //window.statusBarColor = Color.TRANSPARENT
 
         // Apply status bar padding to toolbar
         ViewCompat.setOnApplyWindowInsetsListener(binding.toolbarTitle) { view, insets ->
@@ -77,22 +77,18 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
 
 
+        viewModel.coolingState.observe(this) { state ->
+            binding.tvCooling.text = state.message ?: ""
+            binding.cardViewCooling.visibility = if (state.message == null) View.GONE else View.VISIBLE
 
-        viewModel.coolingMessage.observe(this) { message ->
-            binding.tvCooling.text = message ?: ""
-            binding.cardViewCooling.visibility = if (message == null) View.GONE else View.VISIBLE
+            adapter.updateCoolingState(state.isActive)
         }
 
         viewModel.modules.observe(this) { modules ->
             adapter.submitList(modules)
         }
-        viewModel.accessableIds.observe(this) { modules ->
+        viewModel.accessibleIds.observe(this) { modules ->
             adapter.accessableListModules(modules)
         }
-
-        viewModel.isCoolingActive.observe(this) { isCooling ->
-            adapter.updateCoolingState(isCooling)
-        }
     }
-
 }

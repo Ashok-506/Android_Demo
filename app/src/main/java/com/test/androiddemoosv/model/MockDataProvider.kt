@@ -3,7 +3,6 @@ package com.test.androiddemoosv.model
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.google.gson.Gson
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -12,27 +11,29 @@ object MockDataProvider {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getData(): ApiResponse {
 
-        val start = Instant.now()
-        val end = start.plus(2, ChronoUnit.MINUTES)
+        val curUTCTime = Instant.now() // Current UTC
+        val endUTCTime = curUTCTime.plus(2, ChronoUnit.MINUTES).plus(14, ChronoUnit.SECONDS) // 02 min 14 seconds - cooling period
 
+        Log.d("current_utc",curUTCTime.toString())
+        Log.d("current_utc",endUTCTime.toString())
 
-        val json = """
-        {
-          "user": {
-            "userType": "active",
-            "coolingStartTime": "$start",
-            "coolingEndTime": "$end",
-            "accessibleModules": ["payments", "account_info"]
-          },
-          "modules": [
-            { "id": "payments", "title": "Payments", "requiresConsent": true },
-            { "id": "account_info", "title": "Account Info", "requiresConsent": false },
-            { "id": "consent_center", "title": "Consent Center", "requiresConsent": true }
-          ]
-        }
-        """
+        /*val startTime = "2026-01-17T17:12:00Z";
+        val endTime = "2026-01-17T17:14:14Z";*/
 
-        return Gson().fromJson(json, ApiResponse::class.java)
+        val user = User(
+            userType = "active",
+            coolingStartTime = curUTCTime.toString(), // ISO-8601 UTC
+            coolingEndTime = endUTCTime.toString(),
+            accessibleModules = listOf("payments", "account_info")
+        )
+
+        val modules = listOf(
+            Module("payments", "Payments", requiresConsent = true),
+            Module("account_info", "Account Info", requiresConsent = false),
+            Module("consent_center", "Consent Center", requiresConsent = true)
+        )
+
+        return ApiResponse(user, modules)
     }
 
 }
